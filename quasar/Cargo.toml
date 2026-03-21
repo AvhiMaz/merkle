@@ -18,7 +18,9 @@ client = []
 debug = []
 
 [dependencies]
-quasar-lang = { path = "../quasar/lang" }
+#quasar-lang = { path = "../../quasar/lang" }
+quasar-lang = { version = "0.0.0" }
+quasar-spl = { version = "0.0.0" }
 sha2-const-stable = "0.1.0"
 
 [target.'cfg(any(target_os = "solana", target_arch = "bpf"))'.dependencies]
