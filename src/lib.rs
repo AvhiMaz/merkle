@@ -1,5 +1,7 @@
 #![cfg_attr(not(test), no_std)]
 
+mod state;
+
 use quasar_lang::prelude::*;
 
 declare_id!("Dd1RAREe2DcVY7vKyGiGcx7xVMeRL3z1H1dFAecLYypK");
