@@ -19,10 +19,15 @@ debug = []
 
 [dependencies]
 quasar-lang = { path = "../quasar/lang" }
-solana-instruction = { version = "3.2.0" }
+sha2-const-stable = "0.1.0"
+
+[target.'cfg(any(target_os = "solana", target_arch = "bpf"))'.dependencies]
+solana-define-syscall = { version = "5.0.0", features = ["unstable-static-syscalls"] }
+
+[target.'cfg(not(any(target_os = "solana", target_arch = "bpf")))'.dependencies]
+sha2 = { version = "0.10", default-features = false }
 
 [dev-dependencies]
-merkle-client = { path = "target/client/rust/merkle-client" }
 quasar-svm = { version = "0.1" }
 solana-account = { version = "3.4.0" }
 solana-address = { version = "2.2.0", features = ["decode"] }

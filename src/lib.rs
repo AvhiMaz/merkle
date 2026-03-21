@@ -1,23 +1,13 @@
 #![cfg_attr(not(test), no_std)]
 
+mod hash;
+mod ix;
 mod state;
 
+use ix::*;
 use quasar_lang::prelude::*;
 
 declare_id!("Dd1RAREe2DcVY7vKyGiGcx7xVMeRL3z1H1dFAecLYypK");
-
-#[derive(Accounts)]
-pub struct Initialize<'info> {
-    pub payer: &'info mut Signer,
-    pub system_program: &'info Program<System>,
-}
-
-impl<'info> Initialize<'info> {
-    #[inline(always)]
-    pub fn initialize(&self) -> Result<(), ProgramError> {
-        Ok(())
-    }
-}
 
 #[program]
 mod merkle {
@@ -25,7 +15,22 @@ mod merkle {
 
     #[instruction(discriminator = 0)]
     pub fn initialize(ctx: Ctx<Initialize>) -> Result<(), ProgramError> {
-        ctx.accounts.initialize()
+        ctx.accounts.initialize(&ctx.bumps)
+    }
+
+    #[instruction(discriminator = 1)]
+    pub fn insert(ctx: Ctx<Insert>, leaf: [u8; 32]) -> Result<(), ProgramError> {
+        ctx.accounts.insert(leaf)
+    }
+
+    #[instruction(discriminator = 2)]
+    pub fn verify(
+        ctx: Ctx<Verify>,
+        leaf: [u8; 32],
+        index: u32,
+        proof_bytes: [u8; 640],
+    ) -> Result<(), ProgramError> {
+        ctx.accounts.verify(leaf, index, proof_bytes)
     }
 }
 
