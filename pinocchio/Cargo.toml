@@ -1,0 +1,35 @@
+[package]
+name = "merkle-pinocchio"
+version = "0.1.0"
+edition = "2024"
+
+[lints.rust.unexpected_cfgs]
+level = "warn"
+check-cfg = [
+    'cfg(target_os, values("solana"))',
+]
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+pinocchio = { version = "0.10.2", features = ["cpi"] }
+pinocchio-pubkey = "0.3.0"
+pinocchio-system = "0.5.0"
+sha2-const-stable = "0.1.0"
+
+[target.'cfg(any(target_os = "solana", target_arch = "bpf"))'.dependencies]
+solana-define-syscall = { version = "5.0.0", features = ["unstable-static-syscalls"] }
+
+[target.'cfg(not(any(target_os = "solana", target_arch = "bpf")))'.dependencies]
+sha2 = { version = "0.10", default-features = false }
+
+[dev-dependencies]
+mollusk-svm = "0.10.3"
+solana-sdk = "3.0.0"
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
+opt-level = "z"
